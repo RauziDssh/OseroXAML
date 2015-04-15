@@ -30,11 +30,15 @@ namespace OseroXAML20150414
                 new stone{color = Brushes.Black,Pos_column = 3,Pos_row = 4},
                 new stone{color = Brushes.Black,Pos_column = 4,Pos_row = 3},
             };
+            Cursor cursor = new Cursor() { turn = Brushes.Black,Cursor_column = 2,Cursor_row = 2}; 
             this.DataContext = new
             {
                 Field = Field,
                 Turn = Brushes.Black,
+                Cursor_column = cursor.Cursor_column,
+                Cursor_row = cursor.Cursor_row,
             };
+            
             
         }
 
@@ -49,6 +53,13 @@ namespace OseroXAML20150414
             return cell;
         }
 
+    }
+
+    public class Cursor
+    {
+        public Brush turn { get; set; }
+        public int Cursor_column { get; set; }
+        public int Cursor_row { get; set; }
     }
 
     public class stone

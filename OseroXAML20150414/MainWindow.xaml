@@ -2,8 +2,10 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="700" Width="1050">
+
     <Grid x:Name="Grid01" Background="{Binding Path=Turn}">
-        <ItemsControl x:Name="IC01" ItemsSource="{Binding Path=Field}" Width="600" Height ="600">
+        <ItemsControl Grid.Column="0" Grid.Row="0"
+            x:Name="IC01" ItemsSource="{Binding Path=Field}" Width="600" Height ="600">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid x:Name="Grid_Field" Background="LightGreen" ShowGridLines="True"
@@ -45,5 +47,47 @@
 
 
         </ItemsControl>
+        <Grid Grid.Column="0" Grid.Row="0" Background="Transparent" Width="600" Height ="600">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Rectangle x:Name="cursor1" 
+                Grid.Column="{Binding Path=Cursor_column}"
+                       Grid.Row="{Binding Path=Cursor_row}"
+                       Stroke="{Binding Path=Turn}" StrokeThickness="5">
+                <Rectangle.Triggers>
+                    <EventTrigger RoutedEvent="Rectangle.Loaded">
+                        <BeginStoryboard Name="rectAnimation">
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetName="cursor1"
+                                    Storyboard.TargetProperty="StrokeThickness"
+                                    To="10" 
+                                    Duration="0:0:0.3"
+                                    RepeatBehavior="Forever"
+                                    AutoReverse="False"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Rectangle.Triggers>
+            </Rectangle>
+        </Grid>
     </Grid>
 </Window>
