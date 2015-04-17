@@ -43,17 +43,6 @@ namespace OseroXAML20150414
             
         }
 
-        private void Grid_Field_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //getCellIndexfromPosition(e.GetPosition());
-        }
-
-        private int[] getCellIndexfromPosition(Point p)
-        {
-            int[] cell = new int[2];
-            return cell;
-        }
-
         private void Grid01_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key) { 

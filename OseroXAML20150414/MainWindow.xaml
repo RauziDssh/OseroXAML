@@ -9,8 +9,7 @@
             x:Name="IC01" ItemsSource="{Binding Path=Field}" Width="600" Height ="600">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Grid x:Name="Grid_Field" Background="LightGreen" ShowGridLines="True"
-                          MouseDown="Grid_Field_MouseDown">
+                    <Grid x:Name="Grid_Field" Background="LightGreen" ShowGridLines="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
