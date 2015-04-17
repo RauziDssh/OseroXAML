@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="700" Width="1050">
 
-    <Grid x:Name="Grid01" Background="{Binding Path=Turn}">
+    <Grid x:Name="Grid01" Background="{Binding Path=Turn}"
+          KeyDown="Grid01_KeyDown">
         <ItemsControl Grid.Column="0" Grid.Row="0"
             x:Name="IC01" ItemsSource="{Binding Path=Field}" Width="600" Height ="600">
             <ItemsControl.ItemsPanel>
@@ -47,7 +48,8 @@
 
 
         </ItemsControl>
-        <Grid Grid.Column="0" Grid.Row="0" Background="Transparent" Width="600" Height ="600">
+        <Grid x:Name="grid_cursor"
+ Grid.Column="0" Grid.Row="0" Background="Transparent" Width="600" Height ="600">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -69,9 +71,9 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Rectangle x:Name="cursor1" 
-                Grid.Column="{Binding Path=Cursor_column}"
-                       Grid.Row="{Binding Path=Cursor_row}"
-                       Stroke="{Binding Path=Turn}" StrokeThickness="5">
+                Grid.Column="{Binding Cursor_column,UpdateSourceTrigger=PropertyChanged}"
+                       Grid.Row="{Binding Cursor_row,UpdateSourceTrigger=PropertyChanged}"
+                       Stroke="{Binding turn}" StrokeThickness="5">
                 <Rectangle.Triggers>
                     <EventTrigger RoutedEvent="Rectangle.Loaded">
                         <BeginStoryboard Name="rectAnimation">

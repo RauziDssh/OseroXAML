@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,12 +16,13 @@ using System.Windows.Shapes;
 
 namespace OseroXAML20150414
 {
+
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+        private Cursor cursor;
         public MainWindow()
         {
             InitializeComponent();
@@ -30,15 +32,14 @@ namespace OseroXAML20150414
                 new stone{color = Brushes.Black,Pos_column = 3,Pos_row = 4},
                 new stone{color = Brushes.Black,Pos_column = 4,Pos_row = 3},
             };
-            Cursor cursor = new Cursor() { turn = Brushes.Black,Cursor_column = 2,Cursor_row = 2}; 
-            this.DataContext = new
+            cursor = new Cursor() { turn = Brushes.Black,Cursor_column = 1,Cursor_row = 1}; 
+            this.IC01.DataContext = new
             {
                 Field = Field,
-                Turn = Brushes.Black,
-                Cursor_column = cursor.Cursor_column,
-                Cursor_row = cursor.Cursor_row,
             };
-            
+            this.grid_cursor.DataContext = cursor;
+
+            Keyboard.Focus(Grid01);
             
         }
 
@@ -53,13 +54,69 @@ namespace OseroXAML20150414
             return cell;
         }
 
+        private void Grid01_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key) { 
+                case Key.Left:
+                    cursor.Cursor_column = cursor.Cursor_column - 1;
+                    break;
+                case Key.Right:
+                    cursor.Cursor_column = cursor.Cursor_column + 1;
+                    break;
+                case Key.Down:
+                    cursor.Cursor_row = cursor.Cursor_row + 1;
+                    break;
+                case Key.Up:
+                    cursor.Cursor_row = cursor.Cursor_row - 1 ;
+                    break;
+                case Key.Enter:
+
+                    break;
+            }
+        }
+
     }
 
-    public class Cursor
+    public class Cursor : INotifyPropertyChanged
     {
         public Brush turn { get; set; }
-        public int Cursor_column { get; set; }
-        public int Cursor_row { get; set; }
+
+        private int Cursor_column_val;
+        public int Cursor_column
+        {
+            get 
+            {
+                return Cursor_column_val;
+            }
+            set
+            {
+                Cursor_column_val = value;
+                NotifyPropertyChanged("Cursor_column");
+            }
+        }
+
+        private int Cursor_row_val;
+        public int Cursor_row
+        {
+            get
+            {
+                return Cursor_row_val;
+            }
+            set
+            {
+                Cursor_row_val = value;
+                NotifyPropertyChanged("Cursor_row");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 
     public class stone
