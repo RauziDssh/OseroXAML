@@ -11,7 +11,7 @@ namespace OseroXAML20150414
     {
         private readonly int row_max = 8;
         private readonly int column_max = 8;
-        private int[,] grid;
+        private int[,] grid{get; set;}
 
         private MainWindow MW;
 
@@ -28,12 +28,53 @@ namespace OseroXAML20150414
         }
 
         public void setStone(int color,int x,int y){
-            grid[x, y] = color;
-            MW.Field.Add(new Stone {Color = (StoneColor)color,Column = x, Row = y});
+            if (grid[x, y] == 0)
+            {
+                grid[x, y] = color;
+                if (MW.Field != null)
+                {
+                    MW.Field.Add(new Stone { Color = (StoneColor)color, Column = x, Row = y });
+                }
+            }
+        }
+
+        //反転可能な石を探す
+        //反転する石の座標とひっくり反転後の色を返す
+        private List<Stone> checkTurn(int color,int x,int y)
+        {
+            var list_stone = new List<Stone>();
+            //上方向の検索
+            for (int i = y; 0 <= i ; i--)
+            {
+                if (grid[x,i] != color && grid[x,i] != 0)
+                {
+                    list_stone.Add(new Stone {Color = (StoneColor)color,Column = x,Row = i});
+                }
+                else
+                {
+                    break;
+                }
+            }
+            //下方向の探索
+            for (int i = y; y <=row_max; i++)
+            {
+                if (grid[x, i] != color && grid[x, i] != 0)
+                {
+                    list_stone.Add(new Stone { Color = (StoneColor)color, Column = x, Row = i });
+                }
+                else
+                {
+                    break;
+                }
+            }
+            //右方向の探索
+
+
+            return list_stone;
         }
 
         private void turnColor(){
-        
+            
         }
     }
 }

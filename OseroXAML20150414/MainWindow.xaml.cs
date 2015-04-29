@@ -27,10 +27,10 @@ namespace OseroXAML20150414
         public MainWindow()
         {
             InitializeComponent();
-            GM = new GameModel(this);
 
             Field = new ObservableCollection<Stone>();
             GridCursor = new Cursor() { Turn = StoneColor.Black,Column = 1,Row = 1};
+            GM = new GameModel(this);
             this.DataContext = this;
             Keyboard.Focus(Grid01);
 
