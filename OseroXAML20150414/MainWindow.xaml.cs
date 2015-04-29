@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -22,44 +23,55 @@ namespace OseroXAML20150414
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Cursor cursor;
+        private GameModel GM;
         public MainWindow()
         {
             InitializeComponent();
-            List<stone> Field = new List<stone> { 
-                new stone{color = Brushes.White,Pos_column = 3,Pos_row = 3},
-                new stone{color = Brushes.White,Pos_column = 4,Pos_row = 4},
-                new stone{color = Brushes.Black,Pos_column = 3,Pos_row = 4},
-                new stone{color = Brushes.Black,Pos_column = 4,Pos_row = 3},
-            };
-            cursor = new Cursor() { turn = Brushes.Black,Cursor_column = 1,Cursor_row = 1}; 
-            this.IC01.DataContext = new
-            {
-                Field = Field,
-            };
-            this.grid_cursor.DataContext = cursor;
+            GM = new GameModel(this);
 
+            Field = new ObservableCollection<Stone>();
+            GridCursor = new Cursor() { Turn = StoneColor.Black,Column = 1,Row = 1};
+            this.DataContext = this;
             Keyboard.Focus(Grid01);
+
             
+        }
+
+
+
+        public static readonly DependencyProperty FieldProperty = DependencyProperty.Register("Field", typeof(ObservableCollection<Stone>), typeof(MainWindow));
+
+        public ObservableCollection<Stone> Field
+        {
+            get { return (ObservableCollection<Stone>)GetValue(FieldProperty); }
+            set { SetValue(FieldProperty, value); }
+        }
+
+        public static readonly DependencyProperty GridCursorProperty = DependencyProperty.Register("GridCursor", typeof(Cursor), typeof(MainWindow));
+
+        public Cursor GridCursor
+        {
+            get { return (Cursor)GetValue(GridCursorProperty); }
+            set { SetValue(GridCursorProperty, value); }
         }
 
         private void Grid01_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key) { 
                 case Key.Left:
-                    cursor.Cursor_column = cursor.Cursor_column - 1;
+                    GridCursor.Column = GridCursor.Column - 1;
                     break;
                 case Key.Right:
-                    cursor.Cursor_column = cursor.Cursor_column + 1;
+                    GridCursor.Column = GridCursor.Column + 1;
                     break;
                 case Key.Down:
-                    cursor.Cursor_row = cursor.Cursor_row + 1;
+                    GridCursor.Row = GridCursor.Row + 1;
                     break;
                 case Key.Up:
-                    cursor.Cursor_row = cursor.Cursor_row - 1 ;
+                    GridCursor.Row = GridCursor.Row - 1;
                     break;
                 case Key.Enter:
-
+                    GM.setStone((int)StoneColor.Black,GridCursor.Column,GridCursor.Row);
                     break;
             }
         }
@@ -68,33 +80,57 @@ namespace OseroXAML20150414
 
     public class Cursor : INotifyPropertyChanged
     {
-        public Brush turn { get; set; }
-
-        private int Cursor_column_val;
-        public int Cursor_column
-        {
-            get 
-            {
-                return Cursor_column_val;
-            }
-            set
-            {
-                Cursor_column_val = value;
-                NotifyPropertyChanged("Cursor_column");
-            }
-        }
-
-        private int Cursor_row_val;
-        public int Cursor_row
+        private StoneColor turn;
+        public StoneColor Turn
         {
             get
             {
-                return Cursor_row_val;
+                return turn;
             }
             set
             {
-                Cursor_row_val = value;
-                NotifyPropertyChanged("Cursor_row");
+                if (turn == value)
+                {
+                    return;
+                }
+                turn = value;
+                NotifyPropertyChanged("Turn");
+            }
+        }
+
+        private int column;
+        public int Column
+        {
+            get 
+            {
+                return column;
+            }
+            set
+            {
+                if (column == value)
+                {
+                    return;
+                }
+                column = value;
+                NotifyPropertyChanged("Column");
+            }
+        }
+
+        private int row;
+        public int Row
+        {
+            get
+            {
+                return row;
+            }
+            set
+            {
+                if (row == value)
+                {
+                    return;
+                }
+                row = value;
+                NotifyPropertyChanged("Row");
             }
         }
 
@@ -108,10 +144,16 @@ namespace OseroXAML20150414
         }
     }
 
-    public class stone
+    public enum StoneColor
     {
-        public Brush color { get; set; }
-        public int Pos_column { get; set; }
-        public int Pos_row { get; set; }
+        White,
+        Black
+    }
+
+    public class Stone
+    {
+        public StoneColor Color { get; set; }
+        public int Column { get; set; }
+        public int Row { get; set; }
     } 
 }

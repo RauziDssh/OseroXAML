@@ -35,13 +35,25 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemContainerStyle>
                 <Style>
-                    <Setter Property="Grid.Column" Value="{Binding Path=Pos_column}"/>
-                    <Setter Property="Grid.Row" Value="{Binding Path=Pos_row}"/>
+                    <Setter Property="Grid.Column" Value="{Binding Path=Column}"/>
+                    <Setter Property="Grid.Row" Value="{Binding Path=Row}"/>
                 </Style>
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Ellipse Margin="5" Fill="{Binding Path=color}"/>
+                    <Ellipse Margin="5">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="White"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Color}" Value="Black">
+                                        <Setter Property="Fill" Value="Red"/>
+                                    </DataTrigger>
+                                    
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 
@@ -69,10 +81,23 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Rectangle x:Name="cursor1" 
-                Grid.Column="{Binding Cursor_column,UpdateSourceTrigger=PropertyChanged}"
-                       Grid.Row="{Binding Cursor_row,UpdateSourceTrigger=PropertyChanged}"
-                       Stroke="{Binding turn}" StrokeThickness="5">
+            <Rectangle x:Name="cursor1"
+                       Grid.Column="{Binding GridCursor.Column}"
+                       Grid.Row="{Binding GridCursor.Row}"
+                       Stroke="Black"
+                       StrokeThickness="5">
+                <Rectangle.Style>
+                    <Style TargetType="Rectangle">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Turn}" Value="White">
+                                <Setter Property="Stroke" Value="White"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=Turn}" Value="Black">
+                                <Setter Property="Stroke" Value="Black"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Rectangle.Style>
                 <Rectangle.Triggers>
                     <EventTrigger RoutedEvent="Rectangle.Loaded">
                         <BeginStoryboard Name="rectAnimation">
